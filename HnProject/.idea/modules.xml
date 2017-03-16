@@ -4,7 +4,9 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HnProject.iml" filepath="$PROJECT_DIR$/HnProject.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/business-library/business-library.iml" filepath="$PROJECT_DIR$/business-library/business-library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/function-library/function-library.iml" filepath="$PROJECT_DIR$/function-library/function-library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/uikit-library/uikit-library.iml" filepath="$PROJECT_DIR$/uikit-library/uikit-library.iml" />
     </modules>
   </component>
 </project>

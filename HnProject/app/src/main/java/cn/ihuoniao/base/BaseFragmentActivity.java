@@ -1,6 +1,6 @@
 package cn.ihuoniao.base;
 
-import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 import android.view.View;
 
 import java.util.ArrayList;
@@ -10,13 +10,13 @@ import cn.ihuoniao.dispatcher.Dispatcher;
 import cn.ihuoniao.store.base.Store;
 
 /**
- * Created by sdk-app-shy on 2017/3/15.
+ * Created by sdk-app-shy on 2017/3/16.
  */
 
-public abstract class BaseActivity extends Activity {
+public class BaseFragmentActivity extends FragmentActivity {
 
     protected List<Store> listStore = new ArrayList<>();
-    protected Dispatcher dispatcher = Dispatcher.INSTANCE;
+    protected Dispatcher dispatcher = Dispatcher.getInstance();
 
     protected void init() {
         initView();
@@ -44,16 +44,18 @@ public abstract class BaseActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        for(int i = 0;i < listStore.size() ;i++) {
-            listStore.get(i).register(this);
+
+        for(int i =0;i < listStore.size();i++) {
+            Dispatcher.getInstance().addStore(listStore.get(i));
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        for(int i = 0;i < listStore.size() ;i++) {
-            listStore.get(i).unregister(this);
+
+        for(int i =0;i < listStore.size();i++) {
+            Dispatcher.getInstance().removeStore(listStore.get(i));
         }
     }
 }

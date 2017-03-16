@@ -1,20 +1,24 @@
 package cn.ihuoniao.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.KeyEvent;
+import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
-
-import com.github.lzyzsd.jsbridge.BridgeWebView;
-import com.github.lzyzsd.jsbridge.DefaultHandler;
+import android.widget.Button;
 
 import cn.ihuoniao.R;
 import cn.ihuoniao.base.BaseActivity;
+import cn.ihuoniao.platform.webview.BridgeWebView;
+import cn.ihuoniao.platform.webview.DefaultHandler;
+import cn.ihuoniao.store.ClickStore;
 
 public class MainActivity extends BaseActivity {
 
     private BridgeWebView bwvContent = null;
+    private Button btn = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,11 +32,21 @@ public class MainActivity extends BaseActivity {
         super.initView();
 
         bwvContent = getView(R.id.bwv_content);
+        btn = getView(R.id.btn);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, FirstDeployActivity.class));
+            }
+        });
     }
 
     @Override
     protected void initData() {
         super.initData();
+
+        addStore(new ClickStore());
 
         bwvContent.setDefaultHandler(new DefaultHandler());
 
