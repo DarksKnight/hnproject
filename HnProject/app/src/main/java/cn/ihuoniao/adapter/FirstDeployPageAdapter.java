@@ -6,15 +6,17 @@ import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.List;
 
+import cn.ihuoniao.fragment.FirstDeployFragment;
+
 /**
  * Created by sdk-app-shy on 2017/3/16.
  */
 
 public class FirstDeployPageAdapter extends FragmentPagerAdapter {
 
-    private List<Fragment> listFragment = null;
+    private List<FirstDeployFragment> listFragment = null;
 
-    public FirstDeployPageAdapter(FragmentManager fm, List<Fragment> listFragment) {
+    public FirstDeployPageAdapter(FragmentManager fm, List<FirstDeployFragment> listFragment) {
         super(fm);
         this.listFragment = listFragment;
     }

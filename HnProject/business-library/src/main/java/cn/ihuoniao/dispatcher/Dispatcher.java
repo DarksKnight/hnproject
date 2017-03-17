@@ -34,4 +34,8 @@ public enum  Dispatcher {
             store.onAction(action);
         }
     }
+
+    public List<Store> getStores() {
+        return stores;
+    }
 }

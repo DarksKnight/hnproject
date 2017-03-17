@@ -1,3 +1,5 @@
+import java.text.SimpleDateFormat
+
 apply plugin: 'com.android.application'
 
 android {
@@ -5,22 +7,14 @@ android {
     buildToolsVersion "25.0.2"
     defaultConfig {
         applicationId "cn.ihuoniao.platform"
-        minSdkVersion 10
+        minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
 
-    repositories {
-        flatDir {
-            dirs 'libs'
-        }
+    lintOptions {
+        abortOnError false
     }
 
     signingConfigs {
@@ -38,6 +32,46 @@ android {
             storeFile file('kuman.jks')
         }
     }
+
+    buildTypes {
+
+        release {
+            zipAlignEnabled true
+            minifyEnabled false
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            applicationVariants.all {
+                variant ->
+                    variant.outputs.each {
+                        output ->
+                            if (output.outputFile != null && output.outputFile.name.endsWith('.apk') && 'release'.equals(variant.buildType.name)) {
+                                def apkFile = new File("testclient", "hn_platform_" + getBuildTime() + ".apk")
+                                output.outputFile = apkFile
+                            }
+                    }
+            }
+        }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/ASL2.0'
+    }
+
+    repositories {
+        flatDir {
+            dirs 'libs'
+        }
+    }
+}
+
+def getBuildTime() {
+    return new SimpleDateFormat("yyyyMMddhhmm").format(Calendar.getInstance().getTime());
 }
 
 dependencies {
@@ -45,4 +79,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:21.0.3'
     compile project(':uikit-library')
     compile project(':business-library')
+    compile 'com.facebook.fresco:fresco:1.1.0'
+    compile 'com.tencent.bugly:crashreport:latest.release'
 }

@@ -6,6 +6,7 @@ import android.view.View;
 import java.util.ArrayList;
 import java.util.List;
 
+import cn.ihuoniao.actions.base.ActionsCreator;
 import cn.ihuoniao.dispatcher.Dispatcher;
 import cn.ihuoniao.store.base.Store;
 
@@ -17,6 +18,7 @@ public abstract class BaseActivity extends Activity {
 
     protected List<Store> listStore = new ArrayList<>();
     protected Dispatcher dispatcher = Dispatcher.INSTANCE;
+    protected ActionsCreator actionsCreator = ActionsCreator.INSTANCE;
 
     protected void init() {
         initView();
@@ -33,27 +35,29 @@ public abstract class BaseActivity extends Activity {
         return (E) findViewById(id);
     }
 
-    protected void addStore(Store store) {
-        listStore.add(store);
+    protected void registerStore(Store store) {
+        dispatcher.register(store);
     }
 
-    protected void removeStore(Store store) {
-        listStore.remove(store);
+    protected void unregisterStore(Store store) {
+        dispatcher.unregister(store);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        for(int i = 0;i < listStore.size() ;i++) {
-            listStore.get(i).register(this);
+
+        for(int i = 0;i < dispatcher.getStores().size(); i++) {
+            dispatcher.getStores().get(i).register(this);
         }
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        for(int i = 0;i < listStore.size() ;i++) {
-            listStore.get(i).unregister(this);
+
+        for(int i = 0;i < dispatcher.getStores().size(); i++) {
+            dispatcher.getStores().get(i).unregister(this);
         }
     }
 }

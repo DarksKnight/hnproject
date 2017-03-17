@@ -9,11 +9,11 @@ import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.widget.Button;
 
+import cn.ihuoniao.Constant;
 import cn.ihuoniao.R;
 import cn.ihuoniao.base.BaseActivity;
 import cn.ihuoniao.platform.webview.BridgeWebView;
 import cn.ihuoniao.platform.webview.DefaultHandler;
-import cn.ihuoniao.store.ClickStore;
 
 public class MainActivity extends BaseActivity {
 
@@ -37,6 +37,7 @@ public class MainActivity extends BaseActivity {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+//                actionsCreator.sendNewClick("hello world");
                 startActivity(new Intent(MainActivity.this, FirstDeployActivity.class));
             }
         });
@@ -45,8 +46,6 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initData() {
         super.initData();
-
-        addStore(new ClickStore());
 
         bwvContent.setDefaultHandler(new DefaultHandler());
 
@@ -67,7 +66,7 @@ public class MainActivity extends BaseActivity {
             }
         });
 
-        bwvContent.loadUrl("http://ihuoniao.cn");
+        bwvContent.loadUrl(Constant.PLATFORM_URL);
     }
 
     @Override
