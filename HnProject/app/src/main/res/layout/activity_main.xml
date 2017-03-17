@@ -16,14 +16,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.ldoublem.loadingviewlib.view.LVCircularRing
-        android:id="@+id/lvc_progress"
+    <ProgressBar
+        android:id="@+id/pb_main"
         android:layout_width="@dimen/hn_50dp"
         android:layout_height="@dimen/hn_50dp"
+        android:indeterminate="true"
+        android:indeterminateOnly="false"
         android:layout_centerInParent="true"/>
-
-    <ProgressBar
-        android:layout_width="@dimen/hn_50dp"
-        android:layout_height="@dimen/hn_50dp" />
 
 </RelativeLayout>

@@ -10,8 +10,7 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
-
-import com.ldoublem.loadingviewlib.view.LVCircularRing;
+import android.widget.ProgressBar;
 
 import cn.ihuoniao.Constant;
 import cn.ihuoniao.R;
@@ -23,7 +22,7 @@ public class MainActivity extends BaseActivity {
 
     private BridgeWebView bwvContent = null;
     private Button btn = null;
-    private LVCircularRing lvc = null;
+    private ProgressBar pb = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,10 +37,7 @@ public class MainActivity extends BaseActivity {
 
         bwvContent = getView(R.id.bwv_content);
         btn = getView(R.id.btn);
-        lvc = getView(R.id.lvc_progress);
-
-        lvc.setBarColor(getResources().getColor(R.color.colorTitle));
-        lvc.startAnim();
+        pb = getView(R.id.pb_main);
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,8 +75,7 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
                 if (newProgress > 0) {
-                    lvc.stopAnim();
-                    lvc.setVisibility(View.GONE);
+                    pb.setVisibility(View.GONE);
                 }
                 super.onProgressChanged(view, newProgress);
             }
