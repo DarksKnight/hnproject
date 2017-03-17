@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -23,6 +24,7 @@ public class FirstDeployFragment extends Fragment implements View.OnClickListene
     private SimpleDraweeView ivPic = null;
     private String url = "";
     private boolean isLast = false;
+    private float oldX = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -32,6 +34,21 @@ public class FirstDeployFragment extends Fragment implements View.OnClickListene
         Uri uri = Uri.parse(url);
         ivPic.setImageURI(uri);
         ivPic.setOnClickListener(this);
+
+        ivPic.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if (oldX == -1) {
+                    oldX = event.getX();
+                }
+                if (isLast) {
+                    if (oldX > event.getX()) {
+                        startMainActivity();
+                    }
+                }
+                return false;
+            }
+        });
 
         return rootView;
     }
@@ -52,5 +69,10 @@ public class FirstDeployFragment extends Fragment implements View.OnClickListene
                 getActivity().finish();
             }
         }
+    }
+
+    private void startMainActivity() {
+        startActivity(new Intent(getActivity(), MainActivity.class));
+        getActivity().finish();
     }
 }

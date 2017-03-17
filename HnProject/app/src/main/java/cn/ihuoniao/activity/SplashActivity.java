@@ -8,12 +8,10 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.squareup.otto.Subscribe;
 
 import cn.ihuoniao.Constant;
 import cn.ihuoniao.R;
 import cn.ihuoniao.base.BaseActivity;
-import cn.ihuoniao.event.AppConfigEvent;
 import cn.ihuoniao.store.AppConfigStore;
 
 /**
@@ -29,8 +27,6 @@ public class SplashActivity extends BaseActivity {
     private int time = 0;
 
     private String url = "http://img5.duitang.com/uploads/item/201412/09/20141209002455_fShKH.jpeg";
-
-    private boolean isNeedFinish = false;
 
     private boolean isClose = false;
 
@@ -62,6 +58,7 @@ public class SplashActivity extends BaseActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+        isSetStatusColor = false;
         init();
     }
 
@@ -88,7 +85,7 @@ public class SplashActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (isNeedFinish) {
+                if (Constant.APP_INFO.isNeedFinish) {
                     startMainActivity();
                 }
             }
@@ -99,11 +96,5 @@ public class SplashActivity extends BaseActivity {
         isClose = true;
         startActivity(new Intent(SplashActivity.this, MainActivity.class));
         finish();
-    }
-
-    @Subscribe
-    public void onStoreChange(AppConfigEvent event) {
-        Constant.PLATFORM_URL = event.appConfig.cfg_basehost;
-        isNeedFinish = true;
     }
 }

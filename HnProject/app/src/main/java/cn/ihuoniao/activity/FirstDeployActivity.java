@@ -8,6 +8,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,8 +19,10 @@ import cn.ihuoniao.Constant;
 import cn.ihuoniao.R;
 import cn.ihuoniao.adapter.FirstDeployPageAdapter;
 import cn.ihuoniao.base.BaseFragmentActivity;
+import cn.ihuoniao.event.AppConfigEvent;
 import cn.ihuoniao.fragment.FirstDeployFragment;
 import cn.ihuoniao.platform.viewpagerindicator.CirclePageIndicator;
+import cn.ihuoniao.store.AppConfigStore;
 
 /**
  * Created by sdk-app-shy on 2017/3/16.
@@ -48,12 +53,9 @@ public class FirstDeployActivity extends BaseFragmentActivity implements View.On
     protected void initData() {
         super.initData();
 
-        for (int i = 0; i < 5; i++) {
-            FirstDeployFragment fragment = new FirstDeployFragment();
-            fragment.setPicUrl(urls[i]);
-            listFragment.add(fragment);
-        }
-        listFragment.get(listFragment.size() - 1).setLast(true);
+        registerStore(new AppConfigStore());
+        actionsCreator.request_getAppConfig();
+
         adapter = new FirstDeployPageAdapter(getSupportFragmentManager(), listFragment);
         vp.setAdapter(adapter);
         cpi.setViewPager(vp);
@@ -93,7 +95,23 @@ public class FirstDeployActivity extends BaseFragmentActivity implements View.On
     }
 
     private void startMainActivity() {
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
+        if (Constant.APP_INFO.isNeedFinish) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        } else {
+            Toast.makeText(this, getString(R.string.toast_init), Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Subscribe
+    public void onStoreChange(AppConfigEvent event) {
+        listFragment.clear();
+        for (int i = 0; i < 5; i++) {
+            FirstDeployFragment fragment = new FirstDeployFragment();
+            fragment.setPicUrl(urls[i]);
+            listFragment.add(fragment);
+        }
+        listFragment.get(listFragment.size() - 1).setLast(true);
+        adapter.notifyDataSetChanged();
     }
 }

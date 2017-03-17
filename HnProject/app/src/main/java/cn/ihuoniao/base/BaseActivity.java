@@ -3,9 +3,9 @@ package cn.ihuoniao.base;
 import android.app.Activity;
 import android.view.View;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.jaeger.library.StatusBarUtil;
 
+import cn.ihuoniao.R;
 import cn.ihuoniao.actions.base.ActionsCreator;
 import cn.ihuoniao.dispatcher.Dispatcher;
 import cn.ihuoniao.store.base.Store;
@@ -16,11 +16,15 @@ import cn.ihuoniao.store.base.Store;
 
 public abstract class BaseActivity extends Activity {
 
-    protected List<Store> listStore = new ArrayList<>();
     protected Dispatcher dispatcher = Dispatcher.INSTANCE;
     protected ActionsCreator actionsCreator = ActionsCreator.INSTANCE;
+    protected boolean isSetStatusColor = true;
 
     protected void init() {
+        if (isSetStatusColor) {
+            StatusBarUtil.setColor(this, getResources().getColor(R.color.colorTitle));
+        }
+
         initView();
         initData();
     }

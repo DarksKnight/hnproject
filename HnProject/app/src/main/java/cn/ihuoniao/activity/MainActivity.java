@@ -7,7 +7,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
+
+import com.ldoublem.loadingviewlib.view.LVCircularRing;
 
 import cn.ihuoniao.Constant;
 import cn.ihuoniao.R;
@@ -19,6 +23,7 @@ public class MainActivity extends BaseActivity {
 
     private BridgeWebView bwvContent = null;
     private Button btn = null;
+    private LVCircularRing lvc = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +38,10 @@ public class MainActivity extends BaseActivity {
 
         bwvContent = getView(R.id.bwv_content);
         btn = getView(R.id.btn);
+        lvc = getView(R.id.lvc_progress);
+
+        lvc.setBarColor(getResources().getColor(R.color.colorTitle));
+        lvc.startAnim();
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -48,6 +57,8 @@ public class MainActivity extends BaseActivity {
         super.initData();
 
         bwvContent.setDefaultHandler(new DefaultHandler());
+        bwvContent.getSettings().setJavaScriptEnabled(true);
+        bwvContent.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
 
         bwvContent.setWebChromeClient(new WebChromeClient() {
 
@@ -64,9 +75,18 @@ public class MainActivity extends BaseActivity {
             public void openFileChooser(ValueCallback<Uri> uploadMsg) {
 
             }
+
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if (newProgress > 0) {
+                    lvc.stopAnim();
+                    lvc.setVisibility(View.GONE);
+                }
+                super.onProgressChanged(view, newProgress);
+            }
         });
 
-        bwvContent.loadUrl(Constant.PLATFORM_URL);
+        bwvContent.loadUrl(Constant.APP_INFO.platformUrl);
     }
 
     @Override
