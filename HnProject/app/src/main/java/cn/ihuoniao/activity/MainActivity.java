@@ -10,11 +10,13 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
-import android.widget.ProgressBar;
+
+import com.ldoublem.loadingviewlib.view.LVCircularRing;
 
 import cn.ihuoniao.Constant;
 import cn.ihuoniao.R;
 import cn.ihuoniao.base.BaseActivity;
+import cn.ihuoniao.function.util.LogCatUtil;
 import cn.ihuoniao.platform.webview.BridgeWebView;
 import cn.ihuoniao.platform.webview.DefaultHandler;
 
@@ -22,7 +24,7 @@ public class MainActivity extends BaseActivity {
 
     private BridgeWebView bwvContent = null;
     private Button btn = null;
-    private ProgressBar pb = null;
+    private LVCircularRing lvc = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,13 +39,15 @@ public class MainActivity extends BaseActivity {
 
         bwvContent = getView(R.id.bwv_content);
         btn = getView(R.id.btn);
-        pb = getView(R.id.pb_main);
+        lvc = getView(R.id.lvc_loading);
+        lvc.setBarColor(getResources().getColor(R.color.colorTitle));
+        lvc.startAnim();
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                actionsCreator.sendNewClick("hello world");
-                startActivity(new Intent(MainActivity.this, FirstDeployActivity.class));
+                Intent intent = new Intent(MainActivity.this, LogActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -55,6 +59,8 @@ public class MainActivity extends BaseActivity {
         bwvContent.setDefaultHandler(new DefaultHandler());
         bwvContent.getSettings().setJavaScriptEnabled(true);
         bwvContent.getSettings().setCacheMode(WebSettings.LOAD_CACHE_ELSE_NETWORK);
+        bwvContent.getSettings().setUseWideViewPort(true);
+        bwvContent.getSettings().setLoadWithOverviewMode(true);
 
         bwvContent.setWebChromeClient(new WebChromeClient() {
 
@@ -74,8 +80,9 @@ public class MainActivity extends BaseActivity {
 
             @Override
             public void onProgressChanged(WebView view, int newProgress) {
-                if (newProgress > 0) {
-                    pb.setVisibility(View.GONE);
+                if (newProgress > 30) {
+                    lvc.stopAnim();
+                    lvc.setVisibility(View.GONE);
                 }
                 super.onProgressChanged(view, newProgress);
             }
